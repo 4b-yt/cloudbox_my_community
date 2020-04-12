@@ -1,4 +1,16 @@
 ---
+calibre:
+  domain:
+  subdomain:
+cloudcmd:
+  domain:
+  subdomain:
+ubooquity:
+  domain:
+  subdomain:
+wallabag:
+  domain:
+  subdomain:
 xbackbone:
   domain:
   subdomain:

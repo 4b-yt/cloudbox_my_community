@@ -1,7 +1,7 @@
 #########################################################################
 # Title:            cloudbox_mod: Cloud Commander File Browser          #
 # Author(s):        addbee                                              #
-# URL:              https://github.com/addbee/cloudbox_cloudcmd         #
+# URL:              https://github.com/addbee/cloudbox_my_community     #
 # Docker Image(s):  coderaiser/cloudcmd                                 #
 # --                                                                    #
 #         For the Cloudbox project: https://cloudbox.works              #
@@ -14,7 +14,7 @@
   include_role:
     name: cloudflare-dns
   vars:
-    subdomain: "cloudcmd"
+    subdomain: "{{ cloudcmd.subdomain|default('cloudcmd',true) }}"
   when: cloudflare_enabled
 
 - name: Stop and remove any existing container
@@ -37,9 +37,9 @@
       TZ: "{{ tz }}"
       PUID: "{{ uid }}"
       PGID: "{{ gid }}"
-      VIRTUAL_HOST: "cloudcmd.{{ user.domain }}"
+      VIRTUAL_HOST: "{{ cloudcmd.subdomain|default('cloudcmd',true) }}.{{ cloudcmd.domain | default(user.domain,true) }}"
       VIRTUAL_PORT: "8000"
-      LETSENCRYPT_HOST: "cloudcmd.{{ user.domain }}"
+      LETSENCRYPT_HOST: "{{ cloudcmd.subdomain|default('cloudcmd',true) }}.{{ cloudcmd.domain | default(user.domain,true) }}"
       LETSENCRYPT_EMAIL: "{{ user.email }}"
       CLOUDCMD_AUTH: "true"
       CLOUDCMD_ROOT: "/mnt/fs"

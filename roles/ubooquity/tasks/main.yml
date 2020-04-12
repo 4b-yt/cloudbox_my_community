@@ -1,10 +1,10 @@
 #########################################################################
 # Title:            Community: ubooquity                                #
 # Author(s):        addbee                                              #
-# URL:              https://github.com/Cloudbox/Community               #
-# Docker Image(s):  linuxserver/ubooquity                                  #
+# URL:              https://github.com/addbee/cloudbox_my_community     #
+# Docker Image(s):  linuxserver/ubooquity                               #
 # --                                                                    #
-#         Part of the Cloudbox project: https://cloudbox.works          #
+#         For the Cloudbox project: https://cloudbox.works              #
 #########################################################################
 #                   GNU General Public License v3.0                     #
 #########################################################################
@@ -13,7 +13,7 @@
   include_role:
     name: cloudflare-dns
   vars:
-    subdomain: booq
+    subdomain: "{{ ubooquity.subdomain|default('booq',true) }}"
   when: cloudflare_enabled
 
 - name: Stop and remove any existing containers
@@ -37,9 +37,10 @@
       TZ: "{{ tz }}"
       PUID: "{{ uid }}"
       PGID: "{{ gid }}"      
-      VIRTUAL_HOST: "booq.{{ user.domain }}"
+      
+      VIRTUAL_HOST: "{{ ubooquity.subdomain|default('booq',true) }}.{{ ubooquity.domain | default(user.domain,true) }}"
       VIRTUAL_PORT: "2203"
-      LETSENCRYPT_HOST: "booq.{{ user.domain }}"
+      LETSENCRYPT_HOST: "{{ ubooquity.subdomain|default('booq',true) }}.{{ ubooquity.domain | default(user.domain,true) }}"
       LETSENCRYPT_EMAIL: "{{ user.email }}"
     volumes:
       - "/opt/ubooquity/config:/config"

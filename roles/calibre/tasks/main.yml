@@ -1,10 +1,10 @@
 #########################################################################
 # Title:            Community: Calibre-RDP GUI and Server               #
-# Author(s):                                                     #
-# URL:              https://github.com/Cloudbox/Community               #
-# Docker Image(s):                            #
+# Author(s):                                                            #
+# URL:              https://github.com/addbee/cloudbox_my_community     #
+# Docker Image(s):  linuxserver/calibre                                 #
 # --                                                                    #
-#         Part of the Cloudbox project: https://cloudbox.works          #
+#        For the Cloudbox project: https://cloudbox.works               #
 #########################################################################
 #                   GNU General Public License v3.0                     #
 #########################################################################
@@ -13,7 +13,7 @@
   include_role:
     name: cloudflare-dns
   vars:
-    record: calibre
+    subdomain: "{{ calibre.subdomain|default('calibre',true) }}"
   when: cloudflare_enabled
 
 - name: Stop and remove any existing container
@@ -44,9 +44,9 @@
       LIBRARYINTERNALPATH: "/library"
       WIDTH: "1280"
       HEIGHT: "720"
-      VIRTUAL_HOST: "calibre.{{ user.domain }}"
-      VIRTUAL_PORT: "8080"
-      LETSENCRYPT_HOST: "calibre.{{ user.domain }}"
+      VIRTUAL_HOST: "{{ calibre.subdomain|default('calibre',true) }}.{{ calibre.domain | default(user.domain,true) }}"
+      VIRTUAL_PORT: "8080"      
+      LETSENCRYPT_HOST: "{{ calibre.subdomain|default('calibre',true) }}.{{ calibre.domain | default(user.domain,true) }}"
       LETSENCRYPT_EMAIL: "{{ user.email }}"
     volumes:
       - "/opt/calibre:/config"

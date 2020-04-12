@@ -1,19 +1,20 @@
 #########################################################################
 # Title:            Community: Wallabag                                 #
 # Author(s):        addbee                                              #
-# URL:              https://github.com/Cloudbox/Community               #
+# URL:              https://github.com/addbee/cloudbox_my_community     #
 # Docker Image(s):  wallabag/wallabag                                   #
 # --                                                                    #
-#         Part of the Cloudbox project: https://cloudbox.works          #
+#         For the Cloudbox project: https://cloudbox.works              #
 #########################################################################
 #                   GNU General Public License v3.0                     #
 #########################################################################
+
 ---
 - name: "Setting CloudFlare DNS Record"
   include_role:
     name: cloudflare-dns
   vars:
-    subdomain: bag
+    subdomain: "{{ wallabag.subdomain|default('bag',true) }}"
   when: cloudflare_enabled
 
 - name: Stop and remove any existing containers
@@ -38,11 +39,11 @@
       PUID: "{{ uid }}"
       PGID: "{{ gid }}"
       PASSWORD: "{{ user.pass }}"
-      VIRTUAL_HOST: "bag.{{ user.domain }}"
+      VIRTUAL_HOST: "{{ wallabag.subdomain|default('bag',true) }}.{{ wallabag.domain | default(user.domain,true) }}"
       VIRTUAL_PORT: "80"
-      LETSENCRYPT_HOST: "bag.{{ user.domain }}"
+      LETSENCRYPT_HOST: "{{ wallabag.subdomain|default('bag',true) }}.{{ wallabag.domain | default(user.domain,true) }}"
       LETSENCRYPT_EMAIL: "{{ user.email }}"
-      SYMFONY__ENV__DOMAIN_NAME: "https://bag.{{ user.domain }}"
+      SYMFONY__ENV__DOMAIN_NAME: "https://{{ wallabag.subdomain|default('bag',true) }}.{{ wallabag.domain | default(user.domain,true) }}"
     volumes:
       - "/opt/wallabag/data:/var/www/wallabag/data:rw"
       - "/opt/wallabag/images:/var/www/wallabag/web/assets/images:rw"
