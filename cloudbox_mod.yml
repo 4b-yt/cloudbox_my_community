@@ -7,4 +7,8 @@
     - ['~/cloudbox/adv_settings.yml', '~/cloudbox/defaults/adv_settings.yml.default']
   roles:
     - { role: pre_tasks }
-    - { role: myrole, tags: ['myrole'] }
+    - { role: calibre, tags: ['calibre'] }
+    - { role: cloudcmd, tags: ['cloudcmd'] }
+    - { role: ubooquity, tags: ['ubooquity'] }
+    - { role: wallabag, tags: ['wallabag'] }
+    - { role: xbackbone, tags: ['xbackbone'] }

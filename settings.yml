@@ -1,2 +1,6 @@
 ---
-favorite_color: red
+xbackbone:
+  domain:
+  subdomain:
+  maxupload: 2G
+  storage: /mnt/local/xbackbone

@@ -1,0 +1,58 @@
+#########################################################################
+# Title:            cloudbox_mod: Cloud Commander File Browser          #
+# Author(s):        addbee                                              #
+# URL:              https://github.com/addbee/cloudbox_cloudcmd         #
+# Docker Image(s):  coderaiser/cloudcmd                                 #
+# --                                                                    #
+#         For the Cloudbox project: https://cloudbox.works              #
+#########################################################################
+#                   GNU General Public License v3.0                     #
+#########################################################################
+---
+
+- name: "Setting CloudFlare DNS Record"
+  include_role:
+    name: cloudflare-dns
+  vars:
+    subdomain: "cloudcmd"
+  when: cloudflare_enabled
+
+- name: Stop and remove any existing container
+  docker_container:
+    name: cloudcmd
+    state: absent
+
+- name: Create opt directory
+  file: "path={{ item }} state=directory mode=0775 owner={{ user.name }} group={{ user.name }}"
+  with_items:
+    - /opt/cloudcmd
+    - /opt/cloudcmd/config
+
+- name: Create and start container
+  docker_container:
+    name: cloudcmd
+    image: coderaiser/cloudcmd
+    pull: yes
+    env:
+      TZ: "{{ tz }}"
+      PUID: "{{ uid }}"
+      PGID: "{{ gid }}"
+      VIRTUAL_HOST: "cloudcmd.{{ user.domain }}"
+      VIRTUAL_PORT: "8000"
+      LETSENCRYPT_HOST: "cloudcmd.{{ user.domain }}"
+      LETSENCRYPT_EMAIL: "{{ user.email }}"
+      CLOUDCMD_AUTH: "true"
+      CLOUDCMD_ROOT: "/mnt/fs"
+      CLOUDCMD_USERNAME: "{{ user.name }}"
+      CLOUDCMD_PASSWORD: "{{ user.pass }}"
+    volumes:
+      - "/mnt/unionfs:/mnt/fs"
+    labels:
+      "com.github.cloudbox.cloudbox_managed": "true"
+    user: "{{ uid }}:{{ gid }}"
+    networks:
+      - name: cloudbox
+        aliases:
+          - cloudcmd
+    restart_policy: unless-stopped
+    state: started
