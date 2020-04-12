@@ -1,0 +1,9 @@
+# Ignore all files
+*
+
+# Ignore all files in subdirectories
+**/**
+
+!inventories
+!inventories/**
+!.gitignore
