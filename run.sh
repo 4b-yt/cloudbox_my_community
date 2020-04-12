@@ -35,7 +35,6 @@ italic=$(tput sitm)
 		sudo ansible-playbook cloudbox_mod.yml --tags $1
 	fi
 	
-	sleep 30
 
 ) 200>.run.sh
 

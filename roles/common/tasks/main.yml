@@ -37,6 +37,7 @@
     name: "{{ role_docker_container }}"
     image: "{{ role_docker_image }}"
     pull: yes
+    published_ports: "{{ role_published_ports }}"
     env: "{{ role_docker_default_env | combine(role_custom_docker_env) }}"
     volumes: "{{ role_docker_volumes }}"
     labels:

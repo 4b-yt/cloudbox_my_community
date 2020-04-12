@@ -1,4 +1,3 @@
----
 media_path_root: "/mnt/unionfs/"
 media_path_books: "/mnt/unionfs/Media/Books"
 media_path_comics: "/mnt/unionfs/Media/Comics"

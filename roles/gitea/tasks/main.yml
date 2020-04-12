@@ -1,0 +1,18 @@
+---
+- name: Install required packages
+  apt: 
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - python-pymysql
+
+- name: MariaDB Role
+  include_role:
+    name: mariadb
+
+- name: Create gitea database
+  mysql_db:
+    name: gitea
+    login_user: root
+    login_password: password321
+    state: present

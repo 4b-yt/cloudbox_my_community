@@ -1,7 +1,6 @@
 ---
 - hosts: localhost
   vars_files:
-    - settings.yml
     - ['~/cloudbox/accounts.yml', '~/cloudbox/defaults/accounts.yml.default']
     - ['~/cloudbox/settings.yml', '~/cloudbox/defaults/settings.yml.default']
     - ['~/cloudbox/adv_settings.yml', '~/cloudbox/defaults/adv_settings.yml.default']
@@ -9,6 +8,10 @@
     - { role: pre_tasks }
     - { role: calibre, tags: ['calibre'] }
     - { role: cloudcmd, tags: ['cloudcmd'] }
+    - { role: codeserver, tags: ['codeserver'] }
+    - { role: gitea, tags: ['gitea'] }
+    - { role: lazylibrarian, tags: ['lazylibrarian'] }
     - { role: ubooquity, tags: ['ubooquity'] }
+    - { role: unifi, tags: ['unifi'] }
     - { role: wallabag, tags: ['wallabag'] }
     - { role: xbackbone, tags: ['xbackbone'] }

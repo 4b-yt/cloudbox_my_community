@@ -1,0 +1,32 @@
+---
+role_app_name: "gitea"
+role_docker_image: "gitea/gitea:latest"
+
+role_subdomain: "git"
+role_opt_path: "/opt/{{ role_app_name }}/"
+
+role_domain:
+role_directories:   
+  - "{{ role_opt_path }}"
+
+
+common_subdomain: "{{ role_subdomain|default(role_app_name,true) }}"
+common_fulldomain: "{{ common_subdomain }}.{{ role_domain | default(user.domain,true) }}"
+
+role_custom_docker_env:
+  - DB_TYPE: "mysql"
+  - DB_HOST: "mariadb:3306"
+  - DB_USER: "root"
+  - DB_PASS: "password321"
+  - DB_DATABASE: "gitea"
+  - VIRTUAL_PORT: "3000"
+  - DISABLE_SSH: "true"
+  - RUN_MODE: "prod"
+  - ROOT_URL: "https://{{ common_fulldomain }}/"
+  
+role_docker_volumes:
+  - "/opt/gitea:/data"
+
+role_published_ports:
+  - "127.0.0.1:3000:3000"
+ 
