@@ -1,0 +1,24 @@
+---
+role_app_name: "calibre"
+role_docker_image: "linuxserver/calibre"
+
+role_subdomain: "{{ role_app_name }}"
+role_opt_path: "/opt/{{ role_app_name }}/"
+
+role_domain:
+
+role_directories:   
+  - "{{ role_opt_path }}"
+  - "{{ media_path_books }}"
+   
+role_custom_docker_env:
+  - GUAC_USER: "{{ user.name }}"
+  - GUAC_PASS: "{{ user.pass | hash('md5') }}"
+  - LIBRARYINTERNALPATH: "/library"
+  - WIDTH: "1280"
+  - HEIGHT: "720"  
+  - VIRTUAL_PORT: "8080"
+
+role_docker_volumes:
+  - "{{ role_opt_path }}:/config"
+  - "{{ media_path_books }}:/library"

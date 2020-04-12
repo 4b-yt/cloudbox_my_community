@@ -1,0 +1,25 @@
+---
+role_app_name: "wallabag"
+role_docker_image: "wallabag/wallabag:latest"
+
+role_subdomain: "bag"
+role_opt_path: "/opt/{{ role_app_name }}/"
+
+
+role_domain:
+role_directories:   
+  - "{{ role_opt_path }}"
+  - "{{ role_opt_path }}data"
+  - "{{ role_opt_path }}images"
+
+common_subdomain: "{{ role_subdomain|default(role_app_name,true) }}"
+common_fulldomain: "{{ common_subdomain }}.{{ role_domain | default(user.domain,true) }}"
+
+role_custom_docker_env:
+  - PASSWORD: "{{ user.pass }}" 
+  - SYMFONY__ENV__DOMAIN_NAME: "https://{{ common_fulldomain }}"
+  - VIRTUAL_PORT: "80"
+  
+role_docker_volumes:
+  - "{{ role_opt_path }}data:/var/www/wallabag/data:rw"
+  - "{{ role_opt_path }}images:/var/www/wallabag/web/assets/images:rw"

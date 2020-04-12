@@ -1,0 +1,50 @@
+---
+
+- name: "Setting CloudFlare DNS Record"
+  include_role:
+    name: cloudflare-dns
+  vars:
+    subdomain: "{{ common_subdomain }}"
+  when: cloudflare_enabled
+
+- name: Stop and remove any existing container
+  docker_container: 
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - "{{ role_docker_container }}"
+
+- name: Create required directories
+  file: 
+    path: "{{ item }}"
+    state: directory 
+    mode: '0775'
+    owner: '{{ user.name }}'
+    group: '{{ user.name }}'
+  with_items: "{{ role_directories }}"
+
+- debug:
+    msg: "{{ role_directories }}"
+
+
+- debug:
+    msg: "{{ role_docker_container }}"
+- debug:
+    msg: "{{ role_custom_docker_env }}"
+
+- name: Create and start container
+  docker_container:
+    name: "{{ role_docker_container }}"
+    image: "{{ role_docker_image }}"
+    pull: yes
+    env: "{{ role_docker_default_env | combine(role_custom_docker_env) }}"
+    volumes: "{{ role_docker_volumes }}"
+    labels:
+      "com.github.cloudbox.cloudbox_managed": "true"
+    user: "{{ uid }}:{{ gid }}"
+    networks:
+      - name: cloudbox
+        aliases:
+          - "{{ role_name }}"
+    restart_policy: unless-stopped
+    state: started

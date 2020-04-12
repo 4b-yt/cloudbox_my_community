@@ -1,18 +1,4 @@
 ---
-calibre:
-  domain:
-  subdomain:
-cloudcmd:
-  domain:
-  subdomain:
-ubooquity:
-  domain:
-  subdomain:
-wallabag:
-  domain:
-  subdomain:
-xbackbone:
-  domain:
-  subdomain:
-  maxupload: 2G
-  storage: /mnt/local/xbackbone
+media_path_root: "/mnt/unionfs/"
+media_path_books: "/mnt/unionfs/Media/Books"
+media_path_comics: "/mnt/unionfs/Media/Comics"

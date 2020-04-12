@@ -1,0 +1,22 @@
+---
+role_app_name: "cloudcmd"
+role_docker_image: "coderaiser/cloudcmd"
+
+role_subdomain: "{{ role_app_name }}"
+role_domain:
+
+role_opt_path: "/opt/{{ role_app_name }}/"
+
+role_directories:   
+  - "{{ role_opt_path }}"
+  - "{{ role_opt_path }}config"
+
+role_custom_docker_env:
+  - CLOUDCMD_USERNAME: "{{ user.name }}"
+  - CLOUDCMD_PASSWORD: "{{ user.pass }}"      
+  - VIRTUAL_PORT: "8000"
+  - CLOUDCMD_AUTH: "true"
+  - CLOUDCMD_ROOT: "/mnt/fs"
+
+role_docker_volumes:
+  - "{{ media_path_root }}:/mnt/fs"

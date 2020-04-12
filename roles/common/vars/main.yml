@@ -1,0 +1,14 @@
+---
+common_subdomain: "{{ role_subdomain|default(role_app_name,true) }}"
+common_fulldomain: "{{ common_subdomain }}.{{ role_domain | default(user.domain,true) }}"
+
+role_docker_container: "{{ role_app_name }}"
+
+role_docker_default_env:
+  TZ: "{{ tz }}"
+  PUID: "{{ uid }}"
+  PGID: "{{ gid }}"
+  VIRTUAL_HOST: "{{ common_fulldomain }}" 
+  VIRTUAL_PORT: "80"
+  LETSENCRYPT_HOST: "{{ common_fulldomain }}"
+  LETSENCRYPT_EMAIL: "{{ user.email }}"

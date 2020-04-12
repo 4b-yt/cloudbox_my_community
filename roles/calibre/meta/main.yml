@@ -1,0 +1,4 @@
+dependencies:
+  - role: common
+    vars:
+      what_role: calibre
