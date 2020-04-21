@@ -1,0 +1,26 @@
+---
+role_app_name: "influxdb"
+role_docker_image: "influxdb"
+
+role_subdomain: "{{ role_app_name }}"
+role_opt_path: "/opt/{{ role_app_name }}/"
+
+role_domain:
+role_directories:   
+  - "{{ role_opt_path }}"
+  - "{{ role_opt_path }}config"
+  - "/mnt/local/influxdb"
+  
+common_subdomain: "{{ role_subdomain|default(role_app_name,true) }}"
+common_fulldomain: "{{ common_subdomain }}.{{ role_domain | default(user.domain,true) }}"
+
+role_custom_docker_env:
+  - VIRTUAL_PORT: "33"
+  
+role_docker_volumes:
+  - /etc/localtime:/etc/localtime:ro
+  - "{{ role_opt_path }}config:/var/lib/influxdb"
+  - "/mnt/local/influxdb:/shared"
+
+role_docker_ports:
+  - "127.0.0.1:8086:8086"

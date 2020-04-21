@@ -1,3 +1,8 @@
 media_path_root: "/mnt/unionfs/"
 media_path_books: "/mnt/unionfs/Media/Books"
 media_path_comics: "/mnt/unionfs/Media/Comics"
+media_path_music: "/mnt/unionfs/Media/Music"
+media_path_movies: "/mnt/unionfs/Media/Movies"
+media_path_tv: "/mnt/unionfs/Media/TV"
+media_path_magazines: "/mnt/unionfs/Media/Magazines"
+media_path_auidobooks: "/mnt/unionfs/Media/Audiobooks"

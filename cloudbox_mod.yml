@@ -10,8 +10,11 @@
     - { role: cloudcmd, tags: ['cloudcmd'] }
     - { role: codeserver, tags: ['codeserver'] }
     - { role: gitea, tags: ['gitea'] }
+    - { role: grafana, tags: ['grafana', 'influxdb'] }
     - { role: lazylibrarian, tags: ['lazylibrarian'] }
     - { role: ubooquity, tags: ['ubooquity'] }
     - { role: unifi, tags: ['unifi'] }
+    - { role: influxdb, tags: ['varken', 'influxdb'] }
+    - { role: varken, tags: ['varken'] }
     - { role: wallabag, tags: ['wallabag'] }
     - { role: xbackbone, tags: ['xbackbone'] }
