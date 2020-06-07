@@ -32,7 +32,7 @@ italic=$(tput sitm)
 			fi
 		fi
 
-		sudo ansible-playbook cloudbox_mod.yml --tags $1
+		sudo ansible-playbook --flush-cache cloudbox_mod.yml --tags $1
 	fi
 	
 

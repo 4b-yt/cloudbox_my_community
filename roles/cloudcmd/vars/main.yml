@@ -4,7 +4,7 @@ role_docker_image: "coderaiser/cloudcmd"
 
 role_subdomain: "{{ role_app_name }}"
 role_domain:
-
+role_docker_ports: 
 role_opt_path: "/opt/{{ role_app_name }}/"
 
 role_directories:   

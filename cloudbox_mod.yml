@@ -11,7 +11,9 @@
     - { role: codeserver, tags: ['codeserver'] }
     - { role: gitea, tags: ['gitea'] }
     - { role: grafana, tags: ['grafana', 'influxdb'] }
+    - { role: guacamole, tags: ['guacamole'] }
     - { role: lazylibrarian, tags: ['lazylibrarian'] }
+    - { role: netdata, tags: ['netdata'] }
     - { role: ubooquity, tags: ['ubooquity'] }
     - { role: unifi, tags: ['unifi'] }
     - { role: influxdb, tags: ['varken', 'influxdb'] }

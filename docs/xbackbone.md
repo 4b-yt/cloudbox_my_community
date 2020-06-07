@@ -2,4 +2,4 @@
 
 **Default Username:** admin
 
-**Password:** your cloudbox settings password.
+**Password:** admin

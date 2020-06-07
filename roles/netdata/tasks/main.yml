@@ -1,0 +1,56 @@
+---
+- name: "Set DNS Record on CloudFlare"
+  include_role:
+    name: cloudflare-dns
+  vars:
+    subdomain: netdata
+  when: cloudflare_enabled
+
+- name: Create htpasswd
+  htpasswd:
+    path: "/opt/nginx-proxy/htpasswd/{{ item }}.{{ user.domain }}"
+    name: "{{ user.name }}"
+    password: "{{ user.pass }}"
+    owner: "{{ user.name }}"
+    group: "{{ user.name }}"
+    mode: 0664
+  with_items:
+    - netdata
+
+- name: Stop and remove any existing container
+  docker_container:
+    name: netdata
+    state: absent
+
+- name: Create and start container
+  docker_container:
+    name: netdata
+    image: "netdata/netdata"
+    pull: yes
+    capabilities:
+      - SYS_PTRACE
+    published_ports:
+      - "127.0.0.1:19999:19999"
+    env:
+      VIRTUAL_HOST: "netdata.{{ user.domain }}"
+      VIRTUAL_PORT: 19999
+      LETSENCRYPT_HOST: "netdata.{{ user.domain }}"
+      LETSENCRYPT_EMAIL: "{{ user.email }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/etc/passwd:/host/etc/passwd:ro"
+      - "/etc/group:/host/etc/group:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    labels:
+      "com.github.cloudbox.cloudbox_managed": "true"
+    networks:
+      - name: cloudbox
+        aliases:
+          - netdata
+    purge_networks: yes
+    restart_policy: unless-stopped
+    security_opts:
+      - apparmor:unconfined
+    state: started

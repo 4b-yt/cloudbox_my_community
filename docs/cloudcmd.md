@@ -1,7 +1,7 @@
 # cloudbox_my_community / cloudcmd 
 
 ```
-bash run.sh cloudcmd
+./run.sh cloudcmd
 ```
 
 | Settings |    |

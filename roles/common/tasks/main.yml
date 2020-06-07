@@ -1,43 +1,14 @@
 ---
-- name: Gather sonarr api key
-  command: xq -r .Config.ApiKey /opt/sonarr/app/config.xml
-  register: sonarr_api_key_cmd
-- name: Gather sonarr port
-  command: xq -r .Config.Port /opt/sonarr/app/config.xml
-  register: sonarr_port_cmd
-
-- set_fact: sonarr_api_key="{{ sonarr_api_key_cmd.stdout }}"
-- set_fact: sonarr_port="{{ sonarr_port_cmd.stdout }}"
-
-- name: Gather radarr api key
-  command: xq -r .Config.ApiKey /opt/radarr/app/config.xml
-  register: radarr_api_key_cmd
-- name: Gather radarr port
-  command: xq -r .Config.Port /opt/radarr/app/config.xml
-  register: radarr_port_cmd
-
-- set_fact: radarr_api_key="{{ radarr_api_key_cmd.stdout }}"
-- set_fact: radarr_port="{{ radarr_port_cmd.stdout }}"
 
 
-- debug:
-    msg: "{{ sonarr_api_key }}"
-
-- debug:
-    msg: "{{ sonarr_port }}"
-
-- debug:
-    msg: "{{ radarr_api_key }}"
-    
-- debug:
-    msg: "{{ radarr_port }}"
-
-- name: "Setting CloudFlare DNS Record"
+- name: "Set CloudFlare DNS Record"
   include_role:
     name: cloudflare-dns
   vars:
     subdomain: "{{ common_subdomain }}"
-  when: cloudflare_enabled
+  when: 
+    - cloudflare_enabled
+    - common_subdomain|length > 0
 
 - name: Stop and remove any existing container
   docker_container: 
@@ -58,9 +29,13 @@
 - debug:
     msg: "{{ role_directories }}"
 
+- debug:
+    msg: "{{ role_docker_ports }}"
+
 
 - debug:
     msg: "{{ role_docker_container }}"
+
 - debug:
     msg: "{{ role_custom_docker_env }}"
 
@@ -69,16 +44,17 @@
     name: "{{ role_docker_container }}"
     image: "{{ role_docker_image }}"
     pull: yes
-    published_ports: "{{ role_published_ports }}"
     env: "{{ role_docker_default_env | combine(role_custom_docker_env) }}"
     volumes: "{{ role_docker_volumes }}"
-    ports: "{{ role_docker_ports }}"
+    published_ports: "{{ role_docker_ports }}"
     labels:
       "com.github.cloudbox.cloudbox_managed": "true"
-    user: "{{ uid }}:{{ gid }}"
+    #user: "{{ uid }}:{{ gid }}"
     networks:
       - name: cloudbox
         aliases:
           - "{{ role_name }}"
     restart_policy: unless-stopped
+    purge_networks: yes
     state: started
+    

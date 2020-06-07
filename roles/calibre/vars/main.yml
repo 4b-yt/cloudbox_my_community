@@ -4,7 +4,7 @@ role_docker_image: "linuxserver/calibre"
 
 role_subdomain: "{{ role_app_name }}"
 role_opt_path: "/opt/{{ role_app_name }}/"
-
+role_docker_ports:
 role_domain:
 
 role_directories:   

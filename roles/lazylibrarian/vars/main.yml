@@ -15,5 +15,5 @@ role_docker_volumes:
   - "{{ role_opt_path }}:/config"
   - "/mnt:/mnt"
 
-role_published_ports:
+role_docker_ports:
   - "127.0.0.1:5299:5299"

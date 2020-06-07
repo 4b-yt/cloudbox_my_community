@@ -4,13 +4,13 @@ role_docker_image: "pe46dro/xbackbone-docker"
 
 role_subdomain: "{{ role_app_name }}"
 role_opt_path: "/opt/{{ role_app_name }}/"
-
+role_docker_ports:
 role_domain:
 role_directories:   
   - "{{ role_opt_path }}"
   - "{{ role_opt_path }}cfg"
   - "{{ role_opt_path }}logs"
-  - "/mnt/local/xbackbone"
+  - "/mnt/remote/xbackbone"
   
 common_subdomain: "{{ role_subdomain|default(role_app_name,true) }}"
 common_fulldomain: "{{ common_subdomain }}.{{ role_domain | default(user.domain,true) }}"
@@ -20,8 +20,11 @@ role_custom_docker_env:
   - URL: 'https:\/\/{{ common_fulldomain }}'
   - PHP_UPLOAD_MAX_FILESIZE: "2G"   
   - PHP_MEMORY_LIMIT: "2048M"
+  - APPLICATION_UID: "{{ uid }}"  
+  - APPLICATION_GID: "{{ gid }}"
+  - CONTAINER_UID: "{{ uid }}"
   
 role_docker_volumes:
   - "{{ role_opt_path }}cfg:/app/resources/database"
   - "{{ role_opt_path }}logs:/app/logs"
-  - "/mnt/local/xbackbone:/app/storage" 
+  - "/mnt/unionfs/xbackbone:/app/storage" 

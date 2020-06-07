@@ -19,6 +19,6 @@ role_docker_volumes:
   - "/opt:/host_opt"
   - "/home/{{ user.name }}:/home/coder/host"
 
-role_published_ports:
+role_docker_ports:
   - "127.0.0.1:8143:8080"
  

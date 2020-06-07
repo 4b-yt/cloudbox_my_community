@@ -16,7 +16,7 @@ role_custom_docker_env:
 role_docker_volumes:
   - "{{ role_opt_path }}:/config"
 
-role_published_ports:
-      - 3478:3478/udp
-      - 8080:8080
+role_docker_ports:
+  - "0.0.0.0:3478:3478/udp"
+  - "0.0.0.0:8080:8080"
  

@@ -1,0 +1,55 @@
+
+- name: Create required directories
+  file: 
+    path: "{{ item }}"
+    state: directory 
+    mode: '0775'
+    owner: '{{ user.name }}'
+    group: '{{ user.name }}'
+  with_items: /opt/guacamole/initdb
+
+- name: Get info on db container
+  docker_container_info:
+    name: mariadb
+  register: mariadb_result
+
+
+- name: mariadb Role
+  include_role:
+    name: mariadb
+  when: mariadb_result.exists is false
+
+
+- name: "Create database sql file"
+  shell: docker run --rm guacamole/guacamole /opt/guacamole/bin/initdb.sh --mysql > /opt/guacamole/initdb/initdb.sql
+  ignore_errors: yes
+
+- name: "Copy to db container"
+  shell: docker cp /opt/guacamole/initdb/initdb.sql mariadb:/guacamole.sql
+  ignore_errors: yes
+
+- name: "Create database"
+  shell: docker exec mariadb mysql -u root -ppassword321 -e 'create database IF NOT EXISTS guacamole'
+  ignore_errors: yes
+
+- name: "Import schema"
+  shell: docker exec mariadb mysql -u root -ppassword321 guacamole -e "source /guacamole.sql"
+  ignore_errors: yes
+
+- name: Create and start guac daemon container
+  docker_container:
+    name: "guacd"
+    image: "guacamole/guacd:latest"
+    labels:
+      "com.github.cloudbox.cloudbox_managed": "true"
+    networks:
+      - name: cloudbox
+        aliases:
+          - "guacd"
+    restart_policy: unless-stopped
+    state: started
+
+
+- name: guacamole UI Container (Common Role)
+  include_role:
+    name: common

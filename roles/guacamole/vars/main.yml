@@ -1,0 +1,23 @@
+---
+role_app_name: "guacamole"
+role_docker_image: "guacamole/guacamole:latest"
+role_subdomain: "g"
+role_domain: ""
+
+common_subdomain: "{{ role_subdomain|default(role_app_name,true) }}"
+common_fulldomain: "{{ common_subdomain }}.{{ role_domain | default(user.domain,true) }}"
+
+
+role_opt_path: "/opt/{{ role_app_name }}/"
+role_directories:   
+  - /opt/guacamole/initdb
+role_docker_volumes:
+
+role_docker_ports:
+role_custom_docker_env:
+  - GUACD_HOSTNAME: "guacd"
+  - MYSQL_HOSTNAME: "mariadb"      
+  - MYSQL_DATABASE: "guacamole"          
+  - MYSQL_USER: "root"      
+  - MYSQL_PASSWORD: "password321" 
+  - VIRTUAL_PORT: "8080"

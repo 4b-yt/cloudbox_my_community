@@ -27,6 +27,6 @@ role_custom_docker_env:
 role_docker_volumes:
   - "/opt/gitea:/data"
 
-role_published_ports:
+role_docker_ports:
   - "127.0.0.1:3000:3000"
  

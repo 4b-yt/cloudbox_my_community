@@ -1,0 +1,30 @@
+---
+# work in progress. Gather some of the settings to see if we can preconfigure things like api keys and download clients
+- name: Gather sonarr api key
+  command: xq -r .Config.ApiKey /opt/sonarr/app/config.xml
+  register: sonarr_api_key_cmd
+
+- name: Gather sonarr port
+  command: xq -r .Config.Port /opt/sonarr/app/config.xml
+  register: sonarr_port_cmd
+
+- name: Gather radarr api key
+  command: xq -r .Config.ApiKey /opt/radarr/app/config.xml
+  register: radarr_api_key_cmd
+
+- name: Gather radarr port
+  command: xq -r .Config.Port /opt/radarr/app/config.xml
+  register: radarr_port_cmd
+
+- name: Gather nzbhydra2 API Key
+  command: yq -r .main.apiKey /opt/nzbhydra2/app/nzbhydra.yml
+  register: nzbhydra2_api_key_cmd
+
+- name: "Set vars from command outputs"
+  set_fact: 
+    sonarr_api_key: "{{ sonarr_api_key_cmd.stdout }}"
+    sonarr_port: "{{ sonarr_port_cmd.stdout }}"
+    radarr_api_key: "{{ radarr_api_key_cmd.stdout }}"
+    radarr_port: "{{ radarr_port_cmd.stdout }}"
+    nzbhydra2_api_key: "{{ nzbhydra2_api_key_cmd.stdout }}"
+

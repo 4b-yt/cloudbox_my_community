@@ -1,8 +1,10 @@
-# Ignore all files
-*
-
+ansible.cfg
 # Ignore all files in subdirectories
 
 !inventories
 !inventories/**
 !.gitignore
+ansible.cfg
+.run.sh
+.gitignore
+ansible.cfg
