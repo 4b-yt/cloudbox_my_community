@@ -13,7 +13,6 @@
     name: mariadb
   register: mariadb_result
 
-
 - name: mariadb Role
   include_role:
     name: mariadb
